@@ -149,11 +149,11 @@ public class GameManager : MonoBehaviour
                 pc.left = KeyCode.A;
                 leftText.text = "A";
 
-                pc.down = KeyCode.R;
-                downText.text = "R";
+                pc.down = KeyCode.T;
+                downText.text = "T";
 
-                pc.right = KeyCode.H;
-                rightText.text = "H";
+                pc.right = KeyCode.J;
+                rightText.text = "J";
                 break;
             case 7:
                 pc.up = KeyCode.Keypad1;
@@ -207,18 +207,6 @@ public class GameManager : MonoBehaviour
 
                     pc.right = KeyCode.F;
                     rightText.text = "F";
-                    yield return new WaitForSeconds(3f);
-                    pc.up = KeyCode.V;
-                    upText.text = "V";
-
-                    pc.left = KeyCode.D;
-                    leftText.text = "D";
-
-                    pc.down = KeyCode.F;
-                    downText.text = "F";
-
-                    pc.right = KeyCode.G;
-                    rightText.text = "G";
                     yield return new WaitForSeconds(3f);
                     pc.up = KeyCode.T;
                     upText.text = "T";

@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
             cc1.enabled = false;
             cc2.enabled = false;
             anim.SetBool("PlayerFalls", true);
-            Invoke("EnableBoxCollider", .4f);
+            Invoke("EnableBoxCollider", .38f);
             cantJump = true; //the player can't jump while falling through the ground;
         }
 
