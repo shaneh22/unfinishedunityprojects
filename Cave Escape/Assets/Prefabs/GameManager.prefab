@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4536947873646532965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4536947873646532964}
+  - component: {fileID: 4536947873646532970}
+  - component: {fileID: 4536947873646532971}
+  - component: {fileID: 2713858936159940862}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4536947873646532964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536947873646532965}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4536947873646532970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536947873646532965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00ded2969daa74a09bdad80993d28976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 8
+  rows: 8
+  wallCount:
+    minimum: 5
+    maximum: 9
+  foodCount:
+    minimum: 1
+    maximum: 5
+  enemyBonus: 0
+  exit: {fileID: 3710531913044496714, guid: 84b407b7772264d64aa6a4f11faf754a, type: 3}
+  axe: {fileID: 5320875312536217246, guid: 5175b9af6ac024c769ea88c6c4f5962a, type: 3}
+  sword: {fileID: 8573153091534442363, guid: fdc8d95017e954e299c61ee0872b71a9, type: 3}
+  floorTiles:
+  - {fileID: 3710531913044496714, guid: b57410cc651634263a02d96579f24f95, type: 3}
+  - {fileID: 3710531913044496714, guid: 47ecbea7fdfc243b4937098423c9d0ed, type: 3}
+  - {fileID: 3710531913044496714, guid: 4a5bc237180144413a81772f865db2d4, type: 3}
+  - {fileID: 3710531913044496714, guid: 9d8ebb6babaaf49f9a3e02dd89afbbe1, type: 3}
+  - {fileID: 3710531913044496714, guid: f207c2838c1894cb0aeef28920ff440e, type: 3}
+  - {fileID: 3710531913044496714, guid: 757bb9d4a3c1f446da23fbff5a0cff15, type: 3}
+  - {fileID: 3710531913044496714, guid: b37c82c44271d44aebacdd60eb6bc78e, type: 3}
+  - {fileID: 3710531913044496714, guid: d28412c930f5c4a94a7e7147f92d16f6, type: 3}
+  wallTiles:
+  - {fileID: 3710531913044496714, guid: f7e0bde95b4ce4e018693a97597cd816, type: 3}
+  - {fileID: 4135450293680838940, guid: bcc54e19498fe49c9bd9ade3aed1870d, type: 3}
+  - {fileID: 889867822433163535, guid: 847caba3fadd74a46b216e7641af0fa1, type: 3}
+  - {fileID: 165404144361534390, guid: d59abdeb4d3ab44c1a923a5166fcf20e, type: 3}
+  - {fileID: 5518600423198266955, guid: 457d92cf151e44b51bdbbcd4bb8cb3ec, type: 3}
+  - {fileID: 423685707916544958, guid: 4116b3d8a757b42fdbd3296f6891614a, type: 3}
+  - {fileID: 5171867915831404531, guid: cfceae6f0603b416eaa3e47d70daad68, type: 3}
+  - {fileID: 2810079346530087761, guid: 9661ba6bb78654e71a578f74cc2a0b83, type: 3}
+  foodTiles:
+  - {fileID: 3710531913044496714, guid: cd15e776b8a9146b08075fd9d369a0d1, type: 3}
+  - {fileID: 3710531913044496714, guid: 44d1755afda464066ae000f738c5da9e, type: 3}
+  enemyTiles:
+  - {fileID: 1106449356563808842, guid: c2e7d5dfc8b794011b103200cc65f20c, type: 3}
+  - {fileID: 3204843466485405931, guid: 4005d870de72f4259951a0b1379696c9, type: 3}
+  outerWallTiles:
+  - {fileID: 3710531913044496714, guid: 3ad99e175e2914ee8b6ff5c317c9287a, type: 3}
+  - {fileID: 3710531913044496714, guid: f7ee1a64831d8413ea8ca7d059eae3e5, type: 3}
+  - {fileID: 3710531913044496714, guid: a8964a587e5554fcbaa5c653732ba54d, type: 3}
+--- !u!114 &4536947873646532971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536947873646532965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d2a6a07f3bc940d0baf351208b5e799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelStartDelay: 2
+  turnDelay: 0.1
+  dialogueTrigger: {fileID: 0}
+  boardScript: {fileID: 0}
+  playerFoodPoints: 100
+  playerWallDamage: 1
+  playersTurn: 1
+  swordEquipped: 0
+  level: 1
+  pitchBendGroup: {fileID: 24300002, guid: 7b5f21d8ab4214761b8d1e8dd4473074, type: 2}
+  playerMoved: 0
+  enemies: []
+  doingSetup: 1
+--- !u!114 &2713858936159940862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536947873646532965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb5cbb6119c61409b82a85844efad4e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    sentences:
+    - 'Hiya ! '
+    - I'm here to help!
+    - 'You can''t see me but I''m the one in charge of things down here. '
+    - If you want to escape, you'll need to move to the exit at the top.

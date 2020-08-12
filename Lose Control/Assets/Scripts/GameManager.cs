@@ -156,16 +156,16 @@ public class GameManager : MonoBehaviour
                 rightText.text = "J";
                 break;
             case 7:
-                pc.up = KeyCode.Keypad1;
+                pc.up = KeyCode.Alpha1;
                 upText.text = "1";
 
-                pc.left = KeyCode.Keypad2;
+                pc.left = KeyCode.Alpha2;
                 leftText.text = "2";
 
-                pc.down = KeyCode.Keypad3;
+                pc.down = KeyCode.Alpha3;
                 downText.text = "3";
 
-                pc.right = KeyCode.Keypad4;
+                pc.right = KeyCode.Alpha4;
                 rightText.text = "4";
                 break;
             case 8:
