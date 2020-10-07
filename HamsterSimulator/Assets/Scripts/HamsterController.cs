@@ -25,6 +25,9 @@ public class HamsterController : MonoBehaviour
     public GameObject upgradeButton;
     public GameObject upgradeScreen;
     public GameObject upgradePointButtons;
+    public GameObject slowingDown;
+    public GameObject titleScreen;
+    public GameObject instructionPopup;
 
     private float startTime;
     private float distanceTraveled;
@@ -46,7 +49,37 @@ public class HamsterController : MonoBehaviour
         anim = GetComponent<Animator>();
         upgradeScreen.SetActive(false);
         upgradeButton.SetActive(false);
-        _ = StartCoroutine(AtRest());
+        slowingDown.SetActive(false);
+        _ = StartCoroutine(StartScreen());
+    }
+
+    private IEnumerator StartScreen()
+    {
+        while (true)
+        {
+            if (Input.mousePresent && Input.GetMouseButtonDown(0))
+            {
+                titleScreen.SetActive(false);
+                _ = StartCoroutine(Instructions());
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    private IEnumerator Instructions()
+    {
+        yield return null;
+        while (true)
+        {
+            if (Input.anyKeyDown)
+            {
+                instructionPopup.SetActive(false);
+                _ = StartCoroutine(AtRest());
+                break;
+            }
+            yield return null;
+        }
     }
 
     private IEnumerator AtRest()
@@ -54,8 +87,6 @@ public class HamsterController : MonoBehaviour
         timeText.text = "0:00:00.00";
         distanceTraveled = 0;
         distanceText.text = "0 m";
-        speedText.text = "0";
-        speedText.color = BLACK;
         enduranceSlider.maxValue = endurance;
         enduranceSlider.value = 0;
         while (true)
@@ -123,13 +154,17 @@ public class HamsterController : MonoBehaviour
 
     private IEnumerator Tired()
     {
-        for (float i = speedMultiplier -.2f; i >= 0f; i -= .2f)
+        slowingDown.SetActive(true);
+        for (float i = speedMultiplier - .2f; i >= 0f; i -= .15f + acceleration)
         {
             speedMultiplier = i;
+            anim.SetFloat("SpeedMultiplier", speedMultiplier);
             speedText.text = System.Math.Round(anim.speed * speedMultiplier, 2) + "";
             speedText.color = BLACK;
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.5f - acceleration);
         }
+        speedText.text = "0";
+        slowingDown.SetActive(false);
         anim.SetBool("isRunning", false);
         yield return new WaitForSeconds(2f);
         _ = StartCoroutine(AtRest());
@@ -183,7 +218,7 @@ public class HamsterController : MonoBehaviour
         distanceText.text = Mathf.Round(distanceTraveled) + " m";
         totalDistanceText.text = Mathf.Round(totalDistanceTraveled) + " m";
         cyclesSinceLevelUp++;
-        cyclesBeforeLevelUp = (int)(10 + (10 * Mathf.Log10(level))) - cyclesSinceLevelUp;
+        cyclesBeforeLevelUp = (int)(10 + 1.5 * (level-1)) - cyclesSinceLevelUp;
         cyclesText.text = cyclesBeforeLevelUp + "";
         CheckIfLevelUp();
     }
