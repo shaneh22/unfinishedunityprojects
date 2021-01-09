@@ -214,7 +214,7 @@ MonoBehaviour:
   speed: 8
   jumpForce: 6
   groundCheck: {fileID: 9108717918948118701}
-  checkRadius: 0.1
+  checkRadius: 0.25
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
@@ -224,6 +224,7 @@ MonoBehaviour:
   wallJumpTime: 0.2
   fallMultiplier: 2.5
   jumpTime: 0.35
+  numCoins: 0
   dashTime: 0.2
   dashSpeed: 30
 --- !u!50 &9108717918895720954
