@@ -8,6 +8,7 @@ TagManager:
   - Spikes
   - Coin
   - ExtraDash
+  - FinishLine
   layers:
   - Default
   - TransparentFX
