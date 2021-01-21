@@ -9,7 +9,7 @@ public class HamsterController : MonoBehaviour
     private Animator anim;
     public readonly float cycleDistance = .2f * Mathf.PI; //8 inches in hamster wheel diameter * pi
     public readonly Color BLACK = new Color(0, 0, 0);
-    public readonly Color RED = new Color(255, 0, 0);
+    public readonly Color RED = new Color(245 / 255f, 57 / 255f, 0);
 
     public TMP_Text timeText;
     public TMP_Text distanceText;
@@ -28,6 +28,9 @@ public class HamsterController : MonoBehaviour
     public GameObject slowingDown;
     public GameObject titleScreen;
     public GameObject instructionPopup;
+    public GameObject hotkeysDescription;
+    public GameObject levelUpParticles;
+    public GameObject upgradeParticles;
 
     private float startTime;
     private float distanceTraveled;
@@ -49,6 +52,7 @@ public class HamsterController : MonoBehaviour
         anim = GetComponent<Animator>();
         upgradeScreen.SetActive(false);
         upgradeButton.SetActive(false);
+        hotkeysDescription.SetActive(false);
         slowingDown.SetActive(false);
         _ = StartCoroutine(StartScreen());
     }
@@ -211,6 +215,30 @@ public class HamsterController : MonoBehaviour
         }
     }
 
+    private IEnumerator Hotkeys()
+    {
+        hotkeysDescription.SetActive(true);
+        while(upgradesToUse > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                _ = Instantiate(upgradeParticles, transform.position + new Vector3(-6, 2.5f), Quaternion.identity);
+                UpgradeMaxSpeed();
+            }
+            else if (Input.GetKeyDown(KeyCode.X))
+            {
+                _ = Instantiate(upgradeParticles, transform.position + new Vector3(-6, 2.5f), Quaternion.identity);
+                UpgradeAcceleration();
+            }
+            else if (Input.GetKeyDown(KeyCode.C))
+            {
+                _ = Instantiate(upgradeParticles, transform.position + new Vector3(-6, 2.5f), Quaternion.identity);
+                UpgradeEndurance();
+            }
+            yield return null;
+        }
+    }
+
     public void CompletedCycle()
     {
         distanceTraveled += cycleDistance;
@@ -238,7 +266,9 @@ public class HamsterController : MonoBehaviour
         level++;
         upgradesToUse++;
         upgradeButton.SetActive(true);
+        _ = StartCoroutine(Hotkeys());
         CheckIfPointsAvailable();
+        _ = Instantiate(levelUpParticles, transform.position, Quaternion.identity);
     }
 
     public void OnUpgradeClick()
@@ -259,6 +289,7 @@ public class HamsterController : MonoBehaviour
         {
             upgradePointButtons.SetActive(false);
             upgradeButton.SetActive(false);
+            hotkeysDescription.SetActive(false);
         }
         else
         {

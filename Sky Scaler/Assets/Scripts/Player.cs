@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -34,29 +35,82 @@ public class Player : MonoBehaviour
     public float dashSpeed; //how fast the dash makes the player go
     private int dashDirection; //keep same direction during dash
 
+    private PlayerControls controls;
+
+    private bool playerStarted = false;
+
     private Animator anim;
     private bool isAlive = true;
-    // Start is called before the first frame update
-    void Start()
+    private Vector2 move;
+
+    public GameObject TestPath;
+    private void Awake()
     {
+        controls = new PlayerControls();
+
+        controls.Player.Start.performed += ctx => PlayerStart();
+
+        controls.Player.Movement.performed += ctx => move = ctx.ReadValue<Vector2>();
+        controls.Player.Movement.canceled += ctx => move = Vector2.zero;
+
+        controls.Player.Jump.performed += ctx => Jump();
+        controls.Player.Dash.performed += ctx => Dash();
+
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         jumps = numJumps; //set the number of extra jumps, currently at 1. (double jump)
         Physics2D.gravity = zero;
-        StartCoroutine(PlayerStart());
         ResetDash();
     }
 
-    private IEnumerator PlayerStart()
+    private void OnEnable()
     {
-        while (true)
+        controls.Player.Enable();
+    }
+    private void OnDisable()
+    {
+        controls.Player.Disable();
+    }
+
+    private void PlayerStart()
+    {
+        if (!playerStarted)
         {
-            if (Input.anyKeyDown)
-            {
-                Physics2D.gravity = new Vector2(0, -9.8f);
-                break;
-            }
-            yield return null;
+            Physics2D.gravity = new Vector2(0, -9.8f);
+            playerStarted = true;
+        }
+    }
+
+    private void Jump()
+    {
+        if (!isAlive)
+        {
+            return;
+        }
+        PlayerStart();
+        if (wallSliding)
+        {
+            wallJumping = true;
+            wallJumpDirection = -moveInput;
+            Flip(); //The character was facing the wall, now they are jumping off it in the reverse direction
+            Invoke(nameof(SetWallJumpingFalse), wallJumpTime);
+        }
+        else if(jumps > 0 && !isDashing)
+        {
+            //rb.velocity = Vector2.up * jumpForce * 1.5f;
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
+            jumps--; //Decrease jumps
+            anim.SetBool("JumpUp", true);
+        }
+    }
+
+    private void Dash()
+    {
+        PlayerStart();
+        if (dashTimeCounter > 0) //only dash while there's time left in the dash
+        {
+            isDashing = true;
+            dashDirection = facingRight ? 1 : -1; //set dash direction based on how the character is facing
         }
     }
 
@@ -64,24 +118,6 @@ public class Player : MonoBehaviour
     {
         if (isAlive)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow) && jumps > 0 && !isDashing) //Jump 
-            {
-                rb.velocity = Vector2.up * jumpForce * 1.5f;
-                jumps--; //Decrease jumps
-                anim.SetBool("JumpUp", true);
-            }
-
-            /*
-            if (isGrounded) //If the player is on the ground, reset the number of jumps they have.
-            {
-                ResetJumps();
-                if(dashTimeCounter == 0)
-                {
-                    dashTimeCounter = -1;
-                    Invoke(nameof(ResetDash), 1f); //Delay when the player can dash again
-                }
-            }*/
-
             isTouchingFront = Physics2D.OverlapCircle(frontCheck.position, checkRadius, whatIsWall); //for wallJump, is the player touching a wall 
             wallSliding = isTouchingFront == true && moveInput != 0; //player is sliding on a wall if they are moving against one and not on ground
             if (wallSliding)
@@ -89,31 +125,9 @@ public class Player : MonoBehaviour
                 //If they are wallSliding, reduce their velocity downwards
                 rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow) && wallSliding) //If they are wallSliding and jump, they do a wall jump
-            {
-                wallJumping = true;
-                wallJumpDirection = -moveInput;
-                Flip(); //The character was facing the wall, now they are jumping off it in the reverse direction
-                Invoke(nameof(SetWallJumpingFalse), wallJumpTime);
-            }
             if (wallJumping)
             {
                 rb.velocity = new Vector2(speed * wallJumpDirection, jumpForce); //jump up and in reverse direction away from wall
-            }
-            if (rb.velocity.y < 0) //Better looking jump: More gravity on the way down than up
-            {
-                rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-                anim.SetBool("JumpUp", false);
-                anim.SetBool("Falling", true);
-            }
-            else
-            {
-                anim.SetBool("Falling", false);
-            }
-            if (Input.GetKeyDown(KeyCode.Z) && dashTimeCounter > 0) //only dash while there's time left in the dash
-            {
-                isDashing = true;
-                dashDirection = facingRight ? 1 : -1; //set dash direction based on how the character is facing
             }
             if (isDashing) //and I'm not walking about the player's looks ;)
             {
@@ -133,14 +147,32 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        moveInput = Input.GetAxisRaw("Horizontal"); //Moving is in FixedUpdate as it's better for that 
-        if (!wallJumping && !isDashing && isAlive) //In order to make player jump away from wall, player control of left/right movement must be disabled (also can't change movement during dash)
+        //_ = Instantiate(TestPath, transform.position, Quaternion.identity);
+        if (isAlive)
         {
-            if ((!facingRight && moveInput > 0) || (facingRight && moveInput < 0))
+            moveInput = move.x; //Moving is in FixedUpdate as it's better for that
+            if(moveInput != 0)
             {
-                Flip(); //Make sure our character is facing the right way
+                PlayerStart();
             }
-            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y); //move left or right based on moveInput
+            if (!wallJumping && !isDashing && isAlive) //In order to make player jump away from wall, player control of left/right movement must be disabled (also can't change movement during dash)
+            {
+                if ((!facingRight && moveInput > 0) || (facingRight && moveInput < 0))
+                {
+                    Flip(); //Make sure our character is facing the right way
+                }
+                rb.velocity = new Vector2(moveInput * speed, rb.velocity.y); //move left or right based on moveInput
+            }
+            if (rb.velocity.y < 0) //Better looking jump: More gravity on the way down than up
+            {
+                rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+                anim.SetBool("JumpUp", false);
+                anim.SetBool("Falling", true);
+            }
+            else
+            {
+                anim.SetBool("Falling", false);
+            }
         }
     }
 
@@ -165,14 +197,16 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("ExtraJump")) //When the player collides with a object tagged 'Extra Jump', they get an extra jump
         {
             collision.gameObject.GetComponent<ExtraJump>().Collision(); //This will disable the object temporarily
-            ResetJumps(); //Give the player another jump
+            ResetJumps();
         }
-        else if (collision.gameObject.CompareTag("Spikes"))
+       else if (collision.gameObject.CompareTag("Spikes"))
         {
             anim.SetBool("Death", true);
+            //_ = StartCoroutine(PlayHaptics());
             isAlive = false;
             rb.velocity = new Vector2(-rb.velocity.x , -rb.velocity.y);
             Invoke(nameof(StopMovement), .05f);
+            controls.Player.Disable();
         }
         else if (collision.gameObject.CompareTag("Coin"))
         {
@@ -194,6 +228,12 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+    }
+    private IEnumerator PlayHaptics()
+    {
+        Gamepad.current.SetMotorSpeeds(.25f, .25f);
+        yield return new WaitForSeconds(.5f);
+        InputSystem.ResetHaptics();
     }
     private void StopMovement()
     {
