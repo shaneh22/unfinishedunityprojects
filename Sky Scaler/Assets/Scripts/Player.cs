@@ -43,6 +43,9 @@ public class Player : MonoBehaviour
     private bool isAlive = true;
     private Vector2 move;
 
+    private float jumpPressed;
+    public float jumpPressedRememberTime;
+
     public GameObject TestPath;
     private void Awake()
     {
@@ -95,12 +98,32 @@ public class Player : MonoBehaviour
             Flip(); //The character was facing the wall, now they are jumping off it in the reverse direction
             Invoke(nameof(SetWallJumpingFalse), wallJumpTime);
         }
-        else if(jumps > 0 && !isDashing)
+        /* else if (jumps > 0 && !isDashing)
+         {
+             rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
+             jumps--; //Decrease jumps
+             anim.SetBool("JumpUp", true);
+         }*/
+        else
         {
-            //rb.velocity = Vector2.up * jumpForce * 1.5f;
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
-            jumps--; //Decrease jumps
-            anim.SetBool("JumpUp", true);
+            jumpPressed = jumpPressedRememberTime;
+            _ = StartCoroutine(nameof(DelayedJump));
+        }
+    }
+
+    private IEnumerator DelayedJump()
+    {
+        while (jumpPressed > 0)
+        {
+            if (jumps > 0 && !isDashing)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
+                jumps--; //Decrease jumps
+                anim.SetBool("JumpUp", true);
+                break;
+            }
+            jumpPressed -= Time.deltaTime;
+            yield return null;
         }
     }
 

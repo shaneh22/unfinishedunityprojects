@@ -327,9 +327,9 @@ MonoBehaviour:
   wallSlidingSpeed: 2
   wallJumpTime: 0.2
   fallMultiplier: 2.5
-  maxFallingSpeed: 15
   dashTime: 0.2
   dashSpeed: 30
+  jumpPressedRememberTime: 0.2
   TestPath: {fileID: 0}
 --- !u!50 &9108717918895720954
 Rigidbody2D:
