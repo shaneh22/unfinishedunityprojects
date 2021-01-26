@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExtraJump : MonoBehaviour
+public class Disappear : MonoBehaviour
 {
     public void Collision()
     {
+        StopAllCoroutines();
         gameObject.SetActive(false);
         Invoke(nameof(Reset), 3f);
     }

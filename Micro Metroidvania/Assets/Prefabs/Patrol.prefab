@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 5159373813921540906}
   - component: {fileID: 7879264262449820353}
   - component: {fileID: 2730792139099647401}
-  - component: {fileID: 1146966551149898272}
   - component: {fileID: 6438907540017488003}
   m_Layer: 0
-  m_Name: Jump
+  m_Name: Patrol
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,19 +151,6 @@ MonoBehaviour:
   hurtParticles: {fileID: 6669835165249827183, guid: a356cb87b250f4916aeca4b0a0d31214,
     type: 3}
   invincibilityTime: 0.15
---- !u!114 &1146966551149898272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3303234047442100838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62d12fa0775c34ea08e2513ca25cc2b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForce: 4
 --- !u!114 &6438907540017488003
 MonoBehaviour:
   m_ObjectHideFlags: 0
