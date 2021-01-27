@@ -34,9 +34,7 @@ public class Enemy : MonoBehaviour
     {
         if (health <= 0)
         {
-            Vector2 currPos = transform.position;
-            _ = Instantiate(deathParticles, currPos, Quaternion.identity);
-            Destroy(gameObject);
+            Die();
             return true;
         }
         else
@@ -44,6 +42,14 @@ public class Enemy : MonoBehaviour
             return false;
         }
     }
+
+    protected virtual void Die()
+    {
+        Vector2 currPos = transform.position;
+        _ = Instantiate(deathParticles, currPos, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
     private void StopInvincible()
     {
         invincible = false;

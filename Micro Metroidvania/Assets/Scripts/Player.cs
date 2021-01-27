@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class Player : MonoBehaviour
     private int maxLives = 3;
 //    public float lifeForce;
 
-    private Vector2 savespotPosition;
+    private Vector2 savespotPosition = new Vector2(-3, 14);
     public ParticleSystem savedGame;
     public ParticleSystem deathParticles;
 
@@ -69,6 +70,12 @@ public class Player : MonoBehaviour
     public float attackSpeed;
     public float attackDelayTime;
     private float attackDelay;
+
+    public TMP_Text healthText;
+    public ParticleSystem lifeChanged;
+
+    private float jumpPressedRememberTime;
+    private float wasGroundedTime;
 
     private void Awake()
     {
@@ -98,6 +105,10 @@ public class Player : MonoBehaviour
         controls.Gameplay.Dash.performed += ctx => Dash();
 
         controls.Gameplay.Attack.performed += ctx => Attack();
+
+        healthText = GameObject.Find("HealthText").GetComponent<TMP_Text>();
+        lifeChanged = GameObject.Find("LifeChanged").GetComponent<ParticleSystem>();
+        healthText.text = maxLives + "";
     }
 
     private void OnEnable()
@@ -105,10 +116,25 @@ public class Player : MonoBehaviour
         playerStrength = initialStrength;
         lives = maxLives;
         controls.Gameplay.Enable();
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
     }
+
     private void OnDisable()
     {
         controls.Gameplay.Disable();
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+    }
+
+    private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        InitGame();
+    }
+
+    private void InitGame()
+    {
+        healthText = GameObject.Find("HealthText").GetComponent<TMP_Text>();
+        lifeChanged = GameObject.Find("LifeChanged").GetComponent<ParticleSystem>();
+        SetHealthText();
     }
 
     private void Attack()
@@ -137,8 +163,10 @@ public class Player : MonoBehaviour
         }
         else if (jumps > 0 && !isDashing) //Jump 
         {
-            if (isGrounded)
+            if (isGrounded || wasGroundedTime > 0)
             {
+                ResetDash();
+                wasGroundedTime = 0;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Multiply jumpForce to make player jump
                 isJumping = true;
             }
@@ -147,6 +175,10 @@ public class Player : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * .75f);  //give a little more force to the jump in the air
                 jumps--; //Decrease jumps 
             }
+        }
+        else
+        {
+            jumpPressedRememberTime = .2f;
         }
     }
 
@@ -163,12 +195,27 @@ public class Player : MonoBehaviour
     {
         if (isGrounded) //If the player is on the ground, reset the number of jumps they have.
         {
+            wasGroundedTime = .2f;
             ResetJumps();
             if(dashTimeCounter == 0)
             {
                 dashTimeCounter = -1;
-                Invoke(nameof(ResetDash), 1f); //Delay when the player can dash again
+                Invoke(nameof(ResetDash), .25f); ; //Delay when the player can dash again
             }
+            if (jumpPressedRememberTime > 0 && !isDashing)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Multiply jumpForce to make player jump
+                isJumping = true;
+                jumpPressedRememberTime = 0;
+            }
+            else
+            {
+                jumpPressedRememberTime -= Time.deltaTime;
+            }
+        }
+        else
+        {
+            wasGroundedTime -= Time.deltaTime;
         }
 
         isTouchingFront = Physics2D.OverlapCircle(frontCheck.position, checkRadius, whatIsGround); //for wallJump, is the player touching a wall 
@@ -251,6 +298,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Save"))
         {
             lives = maxLives;
+            SetHealthText();
             savespotPosition = transform.position;
             savedGame.Play();
             collision.gameObject.GetComponent<Disappear>().Collision();
@@ -282,6 +330,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnParticleCollision(GameObject collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            LoseLife();
+            anim.SetBool("Invincible", true);
+        }
+    }
+
     void Flip()
     {
         facingLeft = !facingLeft; //change which way the character is facing
@@ -296,6 +353,7 @@ public class Player : MonoBehaviour
         {
             playerStrength += 2;
             lives--;
+            SetHealthText();
             CheckIfDead();
             invincible = true;
             Invoke(nameof(StopInvincibility), invincibleTime);
@@ -339,5 +397,14 @@ public class Player : MonoBehaviour
     {
         rb.gravityScale = 1;
         controls.Gameplay.Enable();
+    }
+
+    private void SetHealthText()
+    {
+        if (healthText != null && lifeChanged != null)
+        {
+            healthText.text = lives + "";
+            lifeChanged.Play();
+        }
     }
 }

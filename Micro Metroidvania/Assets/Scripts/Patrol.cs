@@ -5,37 +5,44 @@ public class Patrol : MonoBehaviour
     public float speed;
     public float distance;
 
-    private bool movingRight = true;
+    protected bool movingRight = true;
 
     public Transform groundDetection;
 
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
-    private void Awake()
+    protected RaycastHit2D groundInfo;
+
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(speed, rb.velocity.y);
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-        RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);
+        groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);
         if (groundInfo.collider == false)
         {
-            if (movingRight == true)
-            {
-                rb.velocity = new Vector2(-speed, rb.velocity.y);
-                Flip();
-            }
-            else
-            {
-                rb.velocity = new Vector2(speed, rb.velocity.y);
-                Flip();
-            }
+            ChangeDirection();
         }
     }
 
-    void Flip()
+    protected virtual void ChangeDirection()
+    {
+        if (movingRight == true)
+        {
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
+            Flip();
+        }
+        else
+        {
+            rb.velocity = new Vector2(speed, rb.velocity.y);
+            Flip();
+        }
+    }
+
+    protected virtual void Flip()
     {
         movingRight = !movingRight; //change which way the character is facing
         Vector3 Scaler = transform.localScale;

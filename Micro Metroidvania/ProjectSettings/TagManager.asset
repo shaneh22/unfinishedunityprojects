@@ -10,6 +10,7 @@ TagManager:
   - PowerUp
   - Life
   - Sword
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - 
   - 
   - Ground
-  - 
+  - Player
   - 
   - 
   - 
@@ -49,4 +50,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2687047271
+    locked: 0
+  - name: UI
+    uniqueID: 3700102403
     locked: 0
