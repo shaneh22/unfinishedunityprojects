@@ -77,6 +77,14 @@ public class Player : MonoBehaviour
     private float jumpPressedRememberTime;
     private float wasGroundedTime;
 
+    public AudioClip dashSound;
+    public AudioClip blessing;
+    public AudioClip deathSound;
+    public AudioClip healSound;
+    public AudioClip hurtSound;
+    public AudioClip jumpSound;
+    public AudioClip swordSound;
+
     private void Awake()
     {
         if (instance == null)
@@ -141,6 +149,7 @@ public class Player : MonoBehaviour
     {
         if (attackDelay <= 0)
         {
+            SoundManager.instance.PlaySingle(swordSound);
             attackDelay = attackDelayTime;
             sword.SetActive(true);
             Invoke(nameof(StopAttack), attackSpeed);
@@ -156,6 +165,7 @@ public class Player : MonoBehaviour
     {
         if (wallSliding && wallJumpEnabled) //If they are wallSliding and jump, they do a wall jump
         {
+            SoundManager.instance.PlaySingle(jumpSound);
             wallJumping = true;
             wallJumpDirection = -moveInput;
             Flip(); //The character was facing the wall, now they are jumping off it in the reverse direction
@@ -165,6 +175,7 @@ public class Player : MonoBehaviour
         {
             if (isGrounded || wasGroundedTime > 0)
             {
+                SoundManager.instance.PlaySingle(jumpSound);
                 ResetDash();
                 wasGroundedTime = 0;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Multiply jumpForce to make player jump
@@ -172,6 +183,7 @@ public class Player : MonoBehaviour
             }
             else if (doubleJumpEnabled)
             {
+                SoundManager.instance.PlaySingle(jumpSound);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * .75f);  //give a little more force to the jump in the air
                 jumps--; //Decrease jumps 
             }
@@ -204,6 +216,7 @@ public class Player : MonoBehaviour
             }
             if (jumpPressedRememberTime > 0 && !isDashing)
             {
+                SoundManager.instance.PlaySingle(jumpSound);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Multiply jumpForce to make player jump
                 isJumping = true;
                 jumpPressedRememberTime = 0;
@@ -259,6 +272,7 @@ public class Player : MonoBehaviour
         {
             isDashing = true;
             dashDirection = facingLeft ? -1 : 1; //set dash direction based on how the character is facing
+            SoundManager.instance.PlaySingle(dashSound);
         }
     }
 
@@ -297,6 +311,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Save"))
         {
+            SoundManager.instance.PlaySingle(healSound);
             lives = maxLives;
             SetHealthText();
             savespotPosition = transform.position;
@@ -305,13 +320,16 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("PowerUp"))
         {
+            SoundManager.instance.PlaySingle(blessing);
             Destroy(collision.gameObject);
             PowerUp();
         }
         else if (collision.gameObject.CompareTag("Life"))
         {
+            SoundManager.instance.PlaySingle(healSound);
             maxLives++;
             lives = maxLives;
+            SetHealthText();
             PowerUp();
             Destroy(collision.gameObject);
         }
@@ -326,7 +344,8 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Spikes"))
         {
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //If the player hits spikes, restart level.
+            lives = 0;
+            CheckIfDead(); //If the player hits spikes, restart level.
         }
     }
 
@@ -351,6 +370,7 @@ public class Player : MonoBehaviour
     {
         if (!invincible)
         {
+            SoundManager.instance.PlaySingle(hurtSound);
             playerStrength += 2;
             lives--;
             SetHealthText();
@@ -370,6 +390,7 @@ public class Player : MonoBehaviour
     {
         if (lives <= 0)
         {
+            SoundManager.instance.PlaySingle(deathSound);
             Vector2 currPos = transform.position;
             _ = Instantiate(deathParticles, currPos, Quaternion.identity);
             gameObject.SetActive(false);

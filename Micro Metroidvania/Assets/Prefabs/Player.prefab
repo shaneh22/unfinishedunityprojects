@@ -5067,7 +5067,7 @@ MonoBehaviour:
   dashSpeed: 30
   dashEnabled: 0
   doubleJumpEnabled: 0
-  wallJumpEnabled: 1
+  wallJumpEnabled: 0
   lives: 3
   savedGame: {fileID: 4944207729368612234}
   deathParticles: {fileID: 6669835165249827183, guid: 698af5f29e2e54c939e9c7ebfbe31ab7,
@@ -5080,6 +5080,13 @@ MonoBehaviour:
   attackDelayTime: 0.4
   healthText: {fileID: 0}
   lifeChanged: {fileID: 0}
+  dashSound: {fileID: 8300000, guid: 6d42390be50084c6a9ad0b2201a24499, type: 3}
+  blessing: {fileID: 8300000, guid: 529c7e280980446e5a4e2dba07b20001, type: 3}
+  deathSound: {fileID: 8300000, guid: 1d855f7c36f5b4911a6b94bda8c9b008, type: 3}
+  healSound: {fileID: 8300000, guid: b99b1532114fd4ae0879166bd1689cad, type: 3}
+  hurtSound: {fileID: 8300000, guid: 8b3483b63016d4e9baa3ac73ac27f3d8, type: 3}
+  jumpSound: {fileID: 8300000, guid: 861feb6316dc9442c9ea6b5491b50a8a, type: 3}
+  swordSound: {fileID: 8300000, guid: 6099ab5b03714466395789e9ce302d9c, type: 3}
 --- !u!50 &9108717918895720954
 Rigidbody2D:
   serializedVersion: 4

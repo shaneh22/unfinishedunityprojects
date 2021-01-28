@@ -6,6 +6,7 @@ public class Jump : MonoBehaviour
 {
     Rigidbody2D rb;
     public int jumpForce;
+    public float jumpTimeInterval;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +20,7 @@ public class Jump : MonoBehaviour
         while (true)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(jumpTimeInterval);
         }
     }
 }
