@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2730792139099647401}
   - component: {fileID: 5279736097940982282}
   m_Layer: 0
-  m_Name: Rush
+  m_Name: Big Rush
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3303234047442100838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.48, y: 12.52, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 4179809444282891889}
   m_Father: {fileID: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aab3d2b3a300473d9a4d1bf4228e562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 6
+  health: 12
   deathParticles: {fileID: 6669835165249827183, guid: 9401bec0f3b3a4801bce302df3280c30,
     type: 3}
   hurtParticles: {fileID: 6669835165249827183, guid: a356cb87b250f4916aeca4b0a0d31214,
@@ -165,10 +165,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2108981532f5340ad8b6932f6390e1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 3
   distance: 1
   groundDetection: {fileID: 4179809444282891889}
-  rushSpeed: 4
+  rushSpeed: 9
 --- !u!1 &6761913770305685373
 GameObject:
   m_ObjectHideFlags: 0

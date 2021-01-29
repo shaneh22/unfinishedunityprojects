@@ -151,6 +151,8 @@ MonoBehaviour:
   hurtParticles: {fileID: 6669835165249827183, guid: a356cb87b250f4916aeca4b0a0d31214,
     type: 3}
   invincibilityTime: 0.15
+  enemyHurt: {fileID: 8300000, guid: 7d8669667d5734adf91a9d880a7ff40a, type: 3}
+  enemyDead: {fileID: 8300000, guid: 6696961baa12c479288e07e97452bcef, type: 3}
 --- !u!114 &6438907540017488003
 MonoBehaviour:
   m_ObjectHideFlags: 0

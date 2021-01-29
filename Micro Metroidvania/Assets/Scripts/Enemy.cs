@@ -10,6 +10,16 @@ public class Enemy : MonoBehaviour
     private bool invincible;
     public float invincibilityTime;
 
+    public AudioClip enemyHurt;
+    public AudioClip enemyDead;
+
+    public VCam vCam;
+
+    private void Start()
+    {
+        vCam = FindObjectOfType<VCam>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Sword"))
@@ -21,6 +31,8 @@ public class Enemy : MonoBehaviour
     {
         if (!invincible)
         {
+            vCam.ScreenShake();
+            SoundManager.instance.PlaySingle(enemyHurt);
             invincible = true;
             Invoke(nameof(StopInvincible), invincibilityTime);
             health -= damage;
@@ -45,6 +57,8 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        vCam.ScreenShake();
+        SoundManager.instance.PlaySingle(enemyDead);
         Vector2 currPos = transform.position;
         _ = Instantiate(deathParticles, currPos, Quaternion.identity);
         Destroy(gameObject);

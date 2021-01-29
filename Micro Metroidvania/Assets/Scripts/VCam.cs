@@ -6,9 +6,16 @@ using UnityEngine;
 public class VCam : MonoBehaviour
 {
     private CinemachineVirtualCamera cam;
+    private CinemachineBasicMultiChannelPerlin virtualCameraNoise;
+
+    public float shakeDuration;
+    private float shakeElapsedTime;
+    public float shakeAmplitude;
+
     void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
+        virtualCameraNoise = cam.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
         _ = StartCoroutine(FindPlayer());
     }
 
@@ -26,5 +33,22 @@ public class VCam : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void ScreenShake()
+    {
+        _ = StartCoroutine(Shake());
+        shakeElapsedTime = 0;
+    }
+
+    private IEnumerator Shake()
+    {
+        while(shakeElapsedTime < shakeDuration)
+        {
+            virtualCameraNoise.m_AmplitudeGain = shakeAmplitude;
+            shakeElapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        virtualCameraNoise.m_AmplitudeGain = 0;
     }
 }

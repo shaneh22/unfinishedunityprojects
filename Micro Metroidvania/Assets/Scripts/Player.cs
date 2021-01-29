@@ -317,6 +317,7 @@ public class Player : MonoBehaviour
             savespotPosition = transform.position;
             savedGame.Play();
             collision.gameObject.GetComponent<Disappear>().Collision();
+            playerStrength = initialStrength;
         }
         else if (collision.gameObject.CompareTag("PowerUp"))
         {
@@ -364,6 +365,7 @@ public class Player : MonoBehaviour
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler; //This will flip the character
+        sword.SetActive(false);
     }
 
     public void LoseLife()

@@ -23,8 +23,10 @@ public class Explode : Enemy
     {
         //Vector2 currPos = transform.position;
         //_ = Instantiate(explodeParticles, currPos, Quaternion.identity);
+        vCam.ScreenShake();
         explodeParticles.Play();
         explodeParticles.transform.parent = null;
         Destroy(gameObject);
+        SoundManager.instance.PlaySingle(enemyDead);
     }
 }

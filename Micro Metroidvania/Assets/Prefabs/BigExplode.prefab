@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5121392778664775450}
   - component: {fileID: 5803257751717926412}
   m_Layer: 0
-  m_Name: Explode
+  m_Name: BigExplode
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 3303234047442100838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.48, y: 12.52, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 4179809444282891889}
   - {fileID: 2051182279796803411}
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d783a55138b6040f9ab71240572a4352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 3
   distance: 1
   groundDetection: {fileID: 4179809444282891889}
 --- !u!114 &5121392778664775450
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc20d1ee1d8a4d959f22511b1f1cc42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 6
+  health: 15
   deathParticles: {fileID: 6669835165249827183, guid: 9401bec0f3b3a4801bce302df3280c30,
     type: 3}
   hurtParticles: {fileID: 6669835165249827183, guid: a356cb87b250f4916aeca4b0a0d31214,
@@ -170,6 +170,7 @@ MonoBehaviour:
   invincibilityTime: 0.15
   enemyHurt: {fileID: 8300000, guid: 7d8669667d5734adf91a9d880a7ff40a, type: 3}
   enemyDead: {fileID: 8300000, guid: a7f9f04969b8e4c25bbac58b29436647, type: 3}
+  vCam: {fileID: 0}
   explodeParticles: {fileID: 3435663043933869899}
   delayTime: 1
 --- !u!95 &5803257751717926412
@@ -228,6 +229,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3303234047442100836}
     m_Modifications:
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: lengthInSec
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: ShapeModule.m_Position.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: ShapeModule.m_Position.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: ShapeModule.m_Position.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669835165249827183, guid: ec4fe5a1b73e64d658b704d9bbca1175,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7097332073353740967, guid: ec4fe5a1b73e64d658b704d9bbca1175,
         type: 3}
       propertyPath: m_Name
