@@ -171,6 +171,8 @@ MonoBehaviour:
   enemyHurt: {fileID: 8300000, guid: 7d8669667d5734adf91a9d880a7ff40a, type: 3}
   enemyDead: {fileID: 8300000, guid: a7f9f04969b8e4c25bbac58b29436647, type: 3}
   vCam: {fileID: 0}
+  coinParticles: {fileID: 7097332073353740967, guid: fbed8e70c7b564e418c3dd2898a68722,
+    type: 3}
   explodeParticles: {fileID: 3435663043933869899}
   delayTime: 1
 --- !u!95 &5803257751717926412

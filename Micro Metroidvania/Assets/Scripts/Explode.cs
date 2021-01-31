@@ -21,8 +21,8 @@ public class Explode : Enemy
     }
     private void EnemyExplode()
     {
-        //Vector2 currPos = transform.position;
-        //_ = Instantiate(explodeParticles, currPos, Quaternion.identity);
+        Vector2 currPos = transform.position;
+        _ = Instantiate(coinParticles, currPos + Vector2.up, Quaternion.identity);
         vCam.ScreenShake();
         explodeParticles.Play();
         explodeParticles.transform.parent = null;

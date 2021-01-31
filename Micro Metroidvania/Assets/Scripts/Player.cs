@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     public int numJumps = 1;
     private int jumps;
-    private bool facingLeft;
+    public bool facingLeft;
 
     bool isTouchingFront;
     public Transform frontCheck;
@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
     public bool dashEnabled;
     public bool doubleJumpEnabled;
     public bool wallJumpEnabled;
+    public bool vengeanceEnabled;
 
     PlayerControls controls;
 
@@ -59,6 +60,8 @@ public class Player : MonoBehaviour
     private Vector2 savespotPosition = new Vector2(-3, 14);
     public ParticleSystem savedGame;
     public ParticleSystem deathParticles;
+    public ParticleSystem dust;
+    public ParticleSystem blueDust;
 
     [SerializeField] private float invincibleTime;
     private bool invincible;
@@ -74,6 +77,9 @@ public class Player : MonoBehaviour
     public TMP_Text healthText;
     public ParticleSystem lifeChanged;
 
+    public TMP_Text coinsText;
+    public ParticleSystem coinsChanged;
+
     private float jumpPressedRememberTime;
     private float wasGroundedTime;
 
@@ -84,6 +90,11 @@ public class Player : MonoBehaviour
     public AudioClip hurtSound;
     public AudioClip jumpSound;
     public AudioClip swordSound;
+
+    public int numCoins;
+    public GameObject coinParticles;
+
+    public VCam vCam;
 
     private void Awake()
     {
@@ -114,8 +125,16 @@ public class Player : MonoBehaviour
 
         controls.Gameplay.Attack.performed += ctx => Attack();
 
+        vCam = FindObjectOfType<VCam>();
+        controls.Gameplay.LookDown.performed += ctx => LookDown();
+        controls.Gameplay.LookDown.canceled += ctx => ResetCamera();
+
         healthText = GameObject.Find("HealthText").GetComponent<TMP_Text>();
         lifeChanged = GameObject.Find("LifeChanged").GetComponent<ParticleSystem>();
+
+        coinsText = GameObject.Find("CoinsText").GetComponent<TMP_Text>();
+        coinsChanged = GameObject.Find("CoinChanged").GetComponent<ParticleSystem>();
+
         healthText.text = maxLives + "";
     }
 
@@ -142,7 +161,20 @@ public class Player : MonoBehaviour
     {
         healthText = GameObject.Find("HealthText").GetComponent<TMP_Text>();
         lifeChanged = GameObject.Find("LifeChanged").GetComponent<ParticleSystem>();
+        coinsText = GameObject.Find("CoinsText").GetComponent<TMP_Text>();
+        coinsChanged = GameObject.Find("CoinChanged").GetComponent<ParticleSystem>();
+        vCam = FindObjectOfType<VCam>();
         SetHealthText();
+    }
+
+    private void LookDown()
+    {
+        vCam.LookDown();
+    }
+
+    private void ResetCamera()
+    {
+        vCam.ResetCameraPosition();
     }
 
     private void Attack()
@@ -165,6 +197,7 @@ public class Player : MonoBehaviour
     {
         if (wallSliding && wallJumpEnabled) //If they are wallSliding and jump, they do a wall jump
         {
+            dust.Play();
             SoundManager.instance.PlaySingle(jumpSound);
             wallJumping = true;
             wallJumpDirection = -moveInput;
@@ -175,6 +208,7 @@ public class Player : MonoBehaviour
         {
             if (isGrounded || wasGroundedTime > 0)
             {
+                dust.Play();
                 SoundManager.instance.PlaySingle(jumpSound);
                 ResetDash();
                 wasGroundedTime = 0;
@@ -183,6 +217,7 @@ public class Player : MonoBehaviour
             }
             else if (doubleJumpEnabled)
             {
+                blueDust.Play();
                 SoundManager.instance.PlaySingle(jumpSound);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * .75f);  //give a little more force to the jump in the air
                 jumps--; //Decrease jumps 
@@ -216,6 +251,7 @@ public class Player : MonoBehaviour
             }
             if (jumpPressedRememberTime > 0 && !isDashing)
             {
+                dust.Play();
                 SoundManager.instance.PlaySingle(jumpSound);
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce); //Multiply jumpForce to make player jump
                 isJumping = true;
@@ -270,6 +306,14 @@ public class Player : MonoBehaviour
     {
         if (dashTimeCounter > 0 && dashEnabled)
         {
+            if (isGrounded)
+            {
+                dust.Play();
+            }
+            else
+            {
+                blueDust.Play();
+            }
             isDashing = true;
             dashDirection = facingLeft ? -1 : 1; //set dash direction based on how the character is facing
             SoundManager.instance.PlaySingle(dashSound);
@@ -322,7 +366,8 @@ public class Player : MonoBehaviour
         else if (collision.gameObject.CompareTag("PowerUp"))
         {
             SoundManager.instance.PlaySingle(blessing);
-            Destroy(collision.gameObject);
+            SoundManager.instance.musicSource.Pause();
+            collision.gameObject.GetComponent<PowerUp>().Collison();
             PowerUp();
         }
         else if (collision.gameObject.CompareTag("Life"))
@@ -332,6 +377,11 @@ public class Player : MonoBehaviour
             lives = maxLives;
             SetHealthText();
             PowerUp();
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.CompareTag("Coin"))
+        {
+            _ = Instantiate(coinParticles, collision.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
         }
     }
@@ -357,10 +407,45 @@ public class Player : MonoBehaviour
             LoseLife();
             anim.SetBool("Invincible", true);
         }
+        else if (collision.CompareTag("Coin"))
+        {
+            numCoins++;
+            SetCoinsText();
+            List<ParticleCollisionEvent> events;
+            events = new List<ParticleCollisionEvent>();
+
+            ParticleSystem m_System = collision.GetComponent<ParticleSystem>();
+
+            ParticleSystem.Particle[] m_Particles;
+            m_Particles = new ParticleSystem.Particle[m_System.main.maxParticles];
+
+            ParticlePhysicsExtensions.GetCollisionEvents(collision.GetComponent<ParticleSystem>(), gameObject, events);
+            foreach (ParticleCollisionEvent coll in events)
+            {
+                if (coll.intersection != Vector3.zero)
+                {
+                    int numParticlesAlive = m_System.GetParticles(m_Particles);
+
+                    // Check only the particles that are alive
+                    for (int i = 0; i < numParticlesAlive; i++)
+                    {
+
+                        //If the collision was close enough to the particle position, destroy it
+                        if (Vector3.Magnitude(m_Particles[i].position - coll.intersection) < 0.05f)
+                        {
+                            m_Particles[i].remainingLifetime = -1; //Kills the particle
+                            m_System.SetParticles(m_Particles); // Update particle system
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     void Flip()
     {
+        if(isGrounded) dust.Play();
         facingLeft = !facingLeft; //change which way the character is facing
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
@@ -392,6 +477,8 @@ public class Player : MonoBehaviour
     {
         if (lives <= 0)
         {
+            numCoins = 0;
+            SetCoinsText();
             SoundManager.instance.PlaySingle(deathSound);
             Vector2 currPos = transform.position;
             _ = Instantiate(deathParticles, currPos, Quaternion.identity);
@@ -409,15 +496,17 @@ public class Player : MonoBehaviour
 
     public void PowerUp()
     {
+        vCam.ScreenShake();
         controls.Gameplay.Disable();
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0;
         savedGame.Play();
-        Invoke(nameof(ResetGravity), 1f);
+        Invoke(nameof(ResetGravity), 2f);
     }
 
     public void ResetGravity()
     {
+        SoundManager.instance.musicSource.UnPause();
         rb.gravityScale = 1;
         controls.Gameplay.Enable();
     }
@@ -428,6 +517,15 @@ public class Player : MonoBehaviour
         {
             healthText.text = lives + "";
             lifeChanged.Play();
+        }
+    }
+
+    private void SetCoinsText()
+    {
+        if (healthText != null && lifeChanged != null)
+        {
+            coinsText.text = numCoins + "";
+            coinsChanged.Play();
         }
     }
 }

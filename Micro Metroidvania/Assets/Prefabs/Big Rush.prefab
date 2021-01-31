@@ -153,6 +153,9 @@ MonoBehaviour:
   invincibilityTime: 0.15
   enemyHurt: {fileID: 8300000, guid: 7d8669667d5734adf91a9d880a7ff40a, type: 3}
   enemyDead: {fileID: 8300000, guid: 6696961baa12c479288e07e97452bcef, type: 3}
+  vCam: {fileID: 0}
+  coinParticles: {fileID: 7097332073353740967, guid: c27ef150556fc425cb6c01198c715d30,
+    type: 3}
 --- !u!114 &5279736097940982282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,10 +168,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2108981532f5340ad8b6932f6390e1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 4
   distance: 1
   groundDetection: {fileID: 4179809444282891889}
-  rushSpeed: 9
+  rushSpeed: 11
 --- !u!1 &6761913770305685373
 GameObject:
   m_ObjectHideFlags: 0

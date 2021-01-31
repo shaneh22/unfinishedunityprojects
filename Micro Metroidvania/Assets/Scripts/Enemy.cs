@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
 
     public VCam vCam;
 
+    public GameObject coinParticles;
+
     private void Start()
     {
         vCam = FindObjectOfType<VCam>();
@@ -61,6 +63,7 @@ public class Enemy : MonoBehaviour
         SoundManager.instance.PlaySingle(enemyDead);
         Vector2 currPos = transform.position;
         _ = Instantiate(deathParticles, currPos, Quaternion.identity);
+        _ = Instantiate(coinParticles, currPos + Vector2.up, Quaternion.identity);
         Destroy(gameObject);
     }
 
@@ -68,4 +71,5 @@ public class Enemy : MonoBehaviour
     {
         invincible = false;
     }
+
 }

@@ -154,6 +154,9 @@ MonoBehaviour:
   invincibilityTime: 0.15
   enemyHurt: {fileID: 8300000, guid: 7d8669667d5734adf91a9d880a7ff40a, type: 3}
   enemyDead: {fileID: 8300000, guid: 6696961baa12c479288e07e97452bcef, type: 3}
+  vCam: {fileID: 0}
+  coinParticles: {fileID: 7097332073353740967, guid: c27ef150556fc425cb6c01198c715d30,
+    type: 3}
 --- !u!114 &1146966551149898272
 MonoBehaviour:
   m_ObjectHideFlags: 0

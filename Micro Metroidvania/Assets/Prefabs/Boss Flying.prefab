@@ -155,6 +155,8 @@ MonoBehaviour:
   enemyHurt: {fileID: 8300000, guid: 7d8669667d5734adf91a9d880a7ff40a, type: 3}
   enemyDead: {fileID: 8300000, guid: 6696961baa12c479288e07e97452bcef, type: 3}
   vCam: {fileID: 0}
+  coinParticles: {fileID: 7097332073353740967, guid: 41226fc587a3646c9bb3b8c000dd89e0,
+    type: 3}
 --- !u!114 &2330223654249656735
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class VCam : MonoBehaviour
 {
     private CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin virtualCameraNoise;
+    private CinemachineFramingTransposer framingTransposer;
 
     public float shakeDuration;
     private float shakeElapsedTime;
@@ -15,7 +16,8 @@ public class VCam : MonoBehaviour
     void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
-        virtualCameraNoise = cam.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
+        virtualCameraNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        framingTransposer = cam.GetCinemachineComponent<CinemachineFramingTransposer>();
         _ = StartCoroutine(FindPlayer());
     }
 
@@ -50,5 +52,14 @@ public class VCam : MonoBehaviour
             yield return null;
         }
         virtualCameraNoise.m_AmplitudeGain = 0;
+    }
+
+    public void LookDown()
+    {
+        framingTransposer.m_ScreenY = .1f;
+    }
+    public void ResetCameraPosition()
+    {
+        framingTransposer.m_ScreenY = .5f;
     }
 }
