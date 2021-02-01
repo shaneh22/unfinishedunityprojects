@@ -576,7 +576,7 @@ public class Player : MonoBehaviour
 
     public void BossDefeated()
     {
-        Invoke(nameof(GameWon), 2f);
+        Invoke(nameof(GameWon), 3f);
     }
 
     private void GameWon()
