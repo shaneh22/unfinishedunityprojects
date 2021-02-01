@@ -14603,6 +14603,8 @@ MonoBehaviour:
   hurtSound: {fileID: 8300000, guid: 8b3483b63016d4e9baa3ac73ac27f3d8, type: 3}
   jumpSound: {fileID: 8300000, guid: 861feb6316dc9442c9ea6b5491b50a8a, type: 3}
   swordSound: {fileID: 8300000, guid: 6099ab5b03714466395789e9ce302d9c, type: 3}
+  coinSound: {fileID: 8300000, guid: 67834f621646a492abf6d50a7fa291a2, type: 3}
+  coinsSound: {fileID: 8300000, guid: 5c3cd330d1ed84dd68d8bae16f8893fa, type: 3}
   numCoins: 0
   coinParticles: {fileID: 7097332073353740967, guid: c27ef150556fc425cb6c01198c715d30,
     type: 3}

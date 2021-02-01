@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -90,11 +91,21 @@ public class Player : MonoBehaviour
     public AudioClip hurtSound;
     public AudioClip jumpSound;
     public AudioClip swordSound;
+    public AudioClip coinSound;
+    public AudioClip coinsSound;
 
     public int numCoins;
     public GameObject coinParticles;
 
     public VCam vCam;
+
+    private Vector2 lastGroundedPosition;
+
+    private int numDeaths;
+    private DateTime startingTime;
+    private DateTime endingTime;
+    private string speedrunTime;
+    public GameObject winScreen;
 
     private void Awake()
     {
@@ -136,6 +147,13 @@ public class Player : MonoBehaviour
         coinsChanged = GameObject.Find("CoinChanged").GetComponent<ParticleSystem>();
 
         healthText.text = maxLives + "";
+
+        _ = StartCoroutine(LastGroundedPosition());
+
+        startingTime = DateTime.Now;
+
+        winScreen = GameObject.Find("WinScreen");
+        winScreen.SetActive(false);
     }
 
     private void OnEnable()
@@ -165,11 +183,30 @@ public class Player : MonoBehaviour
         coinsChanged = GameObject.Find("CoinChanged").GetComponent<ParticleSystem>();
         vCam = FindObjectOfType<VCam>();
         SetHealthText();
+        _ = StartCoroutine(LastGroundedPosition());
+        winScreen = GameObject.Find("WinScreen");
+        winScreen.SetActive(false);
+    }
+
+    private IEnumerator LastGroundedPosition()
+    {
+        while (true)
+        {
+            if (isGrounded)
+            {
+                lastGroundedPosition = transform.position;
+                yield return new WaitForSeconds(2f);
+            }
+            yield return null;
+        }
     }
 
     private void LookDown()
     {
-        vCam.LookDown();
+        if (isGrounded)
+        {
+            vCam.LookDown();
+        }
     }
 
     private void ResetCamera()
@@ -381,6 +418,7 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Coin"))
         {
+            SoundManager.instance.PlaySingle(coinSound);
             _ = Instantiate(coinParticles, collision.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
         }
@@ -391,12 +429,17 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             LoseLife();
-            anim.SetBool("Invincible", true);
         }
         else if (collision.gameObject.CompareTag("Spikes"))
         {
-            lives = 0;
-            CheckIfDead(); //If the player hits spikes, restart level.
+            LoseLife();
+            if (lives > 0)
+            {
+                controls.Disable();
+                rb.velocity = Vector2.zero;
+                transform.position = lastGroundedPosition;
+                controls.Enable();
+            }
         }
     }
 
@@ -405,12 +448,12 @@ public class Player : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             LoseLife();
-            anim.SetBool("Invincible", true);
         }
         else if (collision.CompareTag("Coin"))
         {
             numCoins++;
             SetCoinsText();
+            SoundManager.instance.PlaySingle(coinsSound);
             List<ParticleCollisionEvent> events;
             events = new List<ParticleCollisionEvent>();
 
@@ -457,6 +500,7 @@ public class Player : MonoBehaviour
     {
         if (!invincible)
         {
+            anim.SetBool("Invincible", true);
             SoundManager.instance.PlaySingle(hurtSound);
             playerStrength += 2;
             lives--;
@@ -477,6 +521,7 @@ public class Player : MonoBehaviour
     {
         if (lives <= 0)
         {
+            numDeaths++;
             numCoins = 0;
             SetCoinsText();
             SoundManager.instance.PlaySingle(deathSound);
@@ -522,10 +567,64 @@ public class Player : MonoBehaviour
 
     private void SetCoinsText()
     {
-        if (healthText != null && lifeChanged != null)
+        if (coinsText != null && coinsChanged != null)
         {
             coinsText.text = numCoins + "";
             coinsChanged.Play();
         }
     }
+
+    public void BossDefeated()
+    {
+        Invoke(nameof(GameWon), 2f);
+    }
+
+    private void GameWon()
+    {
+        winScreen.SetActive(true);
+        controls.Disable();
+        GameObject.Find("Deaths").GetComponent<TMP_Text>().text = "Deaths: " + numDeaths;
+        TMP_Text speedrunText = GameObject.Find("Time").GetComponent<TMP_Text>();
+        endingTime = DateTime.Now;
+        int speedrunHour = endingTime.Hour < startingTime.Hour ? 24 + endingTime.Hour - startingTime.Hour : endingTime.Hour - startingTime.Hour;
+        int speedrunMinute = endingTime.Minute < startingTime.Minute ? 60 + endingTime.Minute - startingTime.Minute : endingTime.Minute - startingTime.Minute;
+        int speedrunSecond = endingTime.Second < startingTime.Second ? 60 + endingTime.Second - startingTime.Second : endingTime.Second - startingTime.Second;
+        speedrunTime = LeadingZero(speedrunHour) + ":" + LeadingZero(speedrunMinute) + ":" + LeadingZero(speedrunSecond);
+        speedrunText.text = "Time: " + speedrunTime;
+        GameObject.Find("Grade").GetComponent<TMP_Text>().text = "Grade: " + Grade();
+    }
+
+    private string LeadingZero(int n)
+    {
+        return n.ToString().PadLeft(2, '0');
+    }
+
+    private string Grade()
+    {
+        if (maxLives == 5 && numCoins >= 200)
+        {
+            return "S";
+        }
+        else if (maxLives == 5 && numCoins >= 150)
+        {
+            return "A";
+        }
+        else if (maxLives == 5 && numCoins >= 100)
+        {
+            return "B";
+        }
+        else if ((maxLives == 5 && numCoins >= 50) || numCoins >= 100)
+        {
+            return "C";
+        }
+        else if(maxLives >= 4)
+        {
+            return "D";
+        }
+        else
+        {
+            return "F";
+        }
+    }
+
 }

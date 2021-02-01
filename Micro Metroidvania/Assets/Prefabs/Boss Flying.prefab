@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3303234047442100839}
   - component: {fileID: 5159373813921540906}
   - component: {fileID: 7879264262449820353}
-  - component: {fileID: 2730792139099647401}
+  - component: {fileID: 6695433727475344764}
   - component: {fileID: 2330223654249656735}
   m_Layer: 0
   m_Name: Boss Flying
@@ -134,7 +134,7 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2730792139099647401
+--- !u!114 &6695433727475344764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,11 +143,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3303234047442100838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4aab3d2b3a300473d9a4d1bf4228e562, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a75abe2224194d89897026a4e96d937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 20
-  deathParticles: {fileID: 6669835165249827183, guid: 9401bec0f3b3a4801bce302df3280c30,
+  deathParticles: {fileID: 6669835165249827183, guid: b3dfed84f0a9c42eea66ce08631662f5,
     type: 3}
   hurtParticles: {fileID: 6669835165249827183, guid: a356cb87b250f4916aeca4b0a0d31214,
     type: 3}
