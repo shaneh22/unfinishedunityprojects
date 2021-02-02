@@ -601,11 +601,11 @@ public class Player : MonoBehaviour
 
     private string Grade()
     {
-        if (maxLives == 5 && numCoins >= 200)
+        if (maxLives == 5 && numCoins >= 300)
         {
             return "S";
         }
-        else if (maxLives == 5 && numCoins >= 150)
+        else if (maxLives == 5 && numCoins >= 200)
         {
             return "A";
         }
