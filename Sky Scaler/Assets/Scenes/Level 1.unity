@@ -590,11 +590,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 9108717918895720955, guid: 425090af035b04a928f47003e0132d7e,
-        type: 3}
-      propertyPath: numJumps
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 9108717918895720956, guid: 425090af035b04a928f47003e0132d7e,
         type: 3}
       propertyPath: m_SortingLayer
