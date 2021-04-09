@@ -50,6 +50,9 @@ public class Player : MonoBehaviour
     public AudioClip[] dashSounds;
 
     public GameObject TestPath;
+
+    public Ghost ghost;
+
     private void Awake()
     {
         controls = new PlayerControls();
@@ -133,6 +136,8 @@ public class Player : MonoBehaviour
             isDashing = true;
             dashDirection = facingRight ? 1 : -1; //set dash direction based on how the character is facing
             if (SoundManager.instance != null) SoundManager.instance.RandomizeSfx(dashSounds);
+            anim.SetBool("Dashing", true);
+            ghost.makeGhost = true;
         }
     }
 
@@ -162,6 +167,8 @@ public class Player : MonoBehaviour
                 {
                     isDashing = false;
                     dashTimeCounter = 0;
+                    anim.SetBool("Dashing", false);
+                    ghost.makeGhost = false;
                 }
             }
         }
@@ -251,17 +258,20 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
+
     private IEnumerator PlayHaptics()
     {
         Gamepad.current.SetMotorSpeeds(.25f, .25f);
         yield return new WaitForSeconds(.5f);
         InputSystem.ResetHaptics();
     }
+
     private void StopMovement()
     {
         rb.velocity = zero;
         Physics2D.gravity = zero;
     }
+
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //If the player hits spikes, restart level.

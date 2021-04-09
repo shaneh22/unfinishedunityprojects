@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 9108717918895720954}
   - component: {fileID: 5363074060052599613}
   - component: {fileID: 3211899181573414087}
+  - component: {fileID: 6456206674026739948}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -291,7 +292,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1422050621
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 6132292428745954916, guid: fd792ebf9ebe74561b3441bcb018d062,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -339,6 +340,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 22fcfa3c8181c4247ad5c31c5558ac25, type: 3}
   - {fileID: 8300000, guid: a2a86e07e6c9d401cbc0754bfc616043, type: 3}
   TestPath: {fileID: 0}
+  ghost: {fileID: 6456206674026739948}
 --- !u!50 &9108717918895720954
 Rigidbody2D:
   serializedVersion: 4
@@ -395,3 +397,19 @@ CircleCollider2D:
   m_Offset: {x: 0.011201978, y: 0.07141423}
   serializedVersion: 2
   m_Radius: 0.28015625
+--- !u!114 &6456206674026739948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108717918895720953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70b9f7b728ec41d9b7b4423f7f9a915, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostDelay: 0.05
+  destroyGhostTime: 0.2
+  makeGhost: 0
+  ghost: {fileID: 8565108714222309084, guid: 267bf8470864f4a9a953c27c743771d2, type: 3}
