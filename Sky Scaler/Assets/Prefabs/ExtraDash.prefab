@@ -97,6 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d94d5f47e9ac7426eb17ed16235fa13e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RespawnTime: 2
+  popSounds:
+  - {fileID: 8300000, guid: 5e936ee3f6b6442a3a13c943b311bf75, type: 3}
+  - {fileID: 8300000, guid: b7493fa3988e9493f9746cb2fa20cc5f, type: 3}
+  - {fileID: 8300000, guid: d5cb183f6b6e14b93be48cfcd8da57ba, type: 3}
 --- !u!95 &8728572672269842273
 Animator:
   serializedVersion: 3

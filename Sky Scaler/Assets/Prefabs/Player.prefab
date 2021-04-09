@@ -327,9 +327,17 @@ MonoBehaviour:
   wallSlidingSpeed: 2
   wallJumpTime: 0.2
   fallMultiplier: 2.5
-  dashTime: 0.2
+  dashTime: 0.15
   dashSpeed: 30
   jumpPressedRememberTime: 0.2
+  jumpSounds:
+  - {fileID: 8300000, guid: f584998bf8d8e4e5099432b82c2d2c84, type: 3}
+  - {fileID: 8300000, guid: 9292e60c9fab2426ea087b9b97fcbedf, type: 3}
+  - {fileID: 8300000, guid: 6a8836fcae82d479197fdd795f826f48, type: 3}
+  dashSounds:
+  - {fileID: 8300000, guid: f2f6e0aac0ff4473ea9c41c40302f16f, type: 3}
+  - {fileID: 8300000, guid: 22fcfa3c8181c4247ad5c31c5558ac25, type: 3}
+  - {fileID: 8300000, guid: a2a86e07e6c9d401cbc0754bfc616043, type: 3}
   TestPath: {fileID: 0}
 --- !u!50 &9108717918895720954
 Rigidbody2D:

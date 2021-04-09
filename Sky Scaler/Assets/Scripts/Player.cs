@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
     private float jumpPressed;
     public float jumpPressedRememberTime;
 
+    public AudioClip[] jumpSounds;
+    public AudioClip[] dashSounds;
+
     public GameObject TestPath;
     private void Awake()
     {
@@ -98,12 +101,6 @@ public class Player : MonoBehaviour
             Flip(); //The character was facing the wall, now they are jumping off it in the reverse direction
             Invoke(nameof(SetWallJumpingFalse), wallJumpTime);
         }
-        /* else if (jumps > 0 && !isDashing)
-         {
-             rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
-             jumps--; //Decrease jumps
-             anim.SetBool("JumpUp", true);
-         }*/
         else
         {
             jumpPressed = jumpPressedRememberTime;
@@ -120,6 +117,7 @@ public class Player : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
                 jumps--; //Decrease jumps
                 anim.SetBool("JumpUp", true);
+                if(SoundManager.instance != null) SoundManager.instance.RandomizeSfx(jumpSounds);
                 break;
             }
             jumpPressed -= Time.deltaTime;
@@ -134,6 +132,7 @@ public class Player : MonoBehaviour
         {
             isDashing = true;
             dashDirection = facingRight ? 1 : -1; //set dash direction based on how the character is facing
+            if (SoundManager.instance != null) SoundManager.instance.RandomizeSfx(dashSounds);
         }
     }
 

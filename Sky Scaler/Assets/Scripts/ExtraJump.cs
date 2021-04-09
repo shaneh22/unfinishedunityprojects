@@ -9,6 +9,8 @@ public class ExtraJump : MonoBehaviour
 
     public float RespawnTime = 2f;
 
+    public AudioClip[] popSounds;
+
     public void Awake()
     {
         anim = GetComponent<Animator>();
@@ -17,6 +19,7 @@ public class ExtraJump : MonoBehaviour
     public void Collision()
     {
         anim.SetTrigger("Collide");
+        if(SoundManager.instance != null) SoundManager.instance.RandomizeSfx(popSounds);
         cc.enabled = false;
     }
     public void Deactivate()
