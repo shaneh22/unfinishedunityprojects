@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     public int numJumps = 1;
     private int jumps;
-    private bool facingRight = true;
+    [SerializeField] private bool facingRight = true;
     private bool isTouchingFront;
     public Transform frontCheck;
     private bool wallSliding;
@@ -130,15 +130,18 @@ public class Player : MonoBehaviour
 
     private void Dash()
     {
-        PlayerStart();
-        if (dashTimeCounter > 0) //only dash while there's time left in the dash
-        {
-            isDashing = true;
-            dashDirection = facingRight ? 1 : -1; //set dash direction based on how the character is facing
-            if (SoundManager.instance != null) SoundManager.instance.RandomizeSfx(dashSounds);
-            anim.SetBool("Dashing", true);
-            ghost.makeGhost = true;
-        }
+  //      if (GameManager.instance.level > 20)
+    //    {
+            PlayerStart();
+            if (dashTimeCounter > 0) //only dash while there's time left in the dash
+            {
+                isDashing = true;
+                dashDirection = facingRight ? 1 : -1; //set dash direction based on how the character is facing
+                if (SoundManager.instance != null) SoundManager.instance.RandomizeSfx(dashSounds);
+                anim.SetBool("Dashing", true);
+                ghost.makeGhost = true;
+            }
+      //  }
     }
 
     private void Update()

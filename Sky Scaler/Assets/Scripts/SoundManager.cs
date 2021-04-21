@@ -12,7 +12,7 @@ public class SoundManager : MonoBehaviour
     public float lowPitchRange = .95f;
     public float highPitchRange = 1.05f;
 
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
         {
@@ -38,7 +38,6 @@ public class SoundManager : MonoBehaviour
         float randomPitch = Random.Range(lowPitchRange, highPitchRange);
 
         efxSource.pitch = randomPitch;
-        efxSource.clip = clips[randomIndex];
-        efxSource.Play();
+        efxSource.PlayOneShot(clips[randomIndex]);
     }
 }
